@@ -1,6 +1,12 @@
-import exp from "constants";
+import React from 'react';
+
+import { exp } from 'constants';
 
 const Piece = ({rank, file, piece}) => {
-    return <div className={`piece ${piece} p-${rank}${file}`}></div>;
+    return (<div
+        className={`piece ${piece} p-${file}${rank}`}
+        draggable={"true"}
+    />
+    )
 }
 export default Piece;
