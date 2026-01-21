@@ -1,0 +1,31 @@
+.board{
+    display:grid;
+    grid-template-columns: calc(.25 * var(--tile-size)) calc(8 * var(--tile-size))  calc(.25 * var(--tile-size));
+}
+.tiles{
+    display: grid;
+    grid-template-columns: repeat(8, var(--tile-size));
+    grid-template-rows: repeat(8, var(--tile-size));
+    width: calc(8 * var(--tile-size));
+
+}
+.tile{
+    width: var(--tile-size);
+    height: var(--tile-size);
+}
+.tile.light {
+  background-color: #f0d9b5; /* light brown */
+}
+
+.tile.dark {
+  background-color: #b58863; /* darker brown */
+}
+
+.tile {
+    width: var(--tile-size);
+    height: var(--tile-size);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+}

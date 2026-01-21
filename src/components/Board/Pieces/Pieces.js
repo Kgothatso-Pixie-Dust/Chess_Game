@@ -1,0 +1,33 @@
+import './Pieces.css';
+import Piece from './Piece';
+const Pieces = () => {
+    const position = new Array(8).fill().map((x, i) => new Array(8).fill(null));
+    
+    position[0][0] = 'wr';
+    position[0][1] = 'wn';
+    position[0][2] = 'wb';
+    position[0][3] = 'wq';
+    position[0][4] = 'wk';
+    position[0][5] = 'wb';
+    position[0][6] = 'wn';
+    position[0][7] = 'wr';
+    position[7][7] = 'br';
+    
+    console.log(position);
+
+    return <div className="pieces">
+        {position.map((r, rank) =>
+            rank.map((f, file) =>
+                position[rank][file] 
+                 ? <Piece 
+                    key={rank + '-' +file}
+                    rank={rank}
+                    file={file} 
+                    piece={position[rank][file]}
+                    /> : null
+            )
+        )}
+    </div>;
+    
+}
+export default Pieces;
