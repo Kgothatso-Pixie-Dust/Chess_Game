@@ -1,43 +1,56 @@
-import './Pieces.css';
-import Piece from './Piece';
+import './Pieces.css'
+import Piece from './Piece'
+import { useRef, useState  } from 'react'
+import { useAppContext } from '../../contexts/Context'
+import { copyPosition, createPosition } from '../../../helper'
+import { makeNewMove } from '../../../reducer/actions/move'
+// import { getNewMoveNotation } from '../../helper'
+
 const Pieces = () => {
-    const position = new Array(8).fill().map((x, i) => new Array(8).fill(null));
-    for (let i = 0; i < 8; i++) {
-        position[1][i] = "wp"
-        position[6][i] = "bp"
+    const { appState , dispatch } = useAppContext();
+    const currentPosition = appState.position[appState.position.length-1]
+    const ref = useRef()
+    
+    const calculateCoords = e => {
+        const {top,left,width} = ref.current.getBoundingClientRect()
+        const size = width / 8
+        const y = Math.floor((e.clientX - left) / size) 
+        const x = 7 - Math.floor((e.clientY - top) / size)
+
+        return {x,y}
     }
-    position[0][0] = 'wr';
-    position[0][1] = 'wn';
-    position[0][2] = 'wb';
-    position[0][3] = 'wq';
-    position[0][4] = 'wk';
-    position[0][5] = 'wb';
-    position[0][6] = 'wn';
-    position[0][7] = 'wr';
 
-    position[7][0] = 'br';
-    position[7][1] = 'bn';
-    position[7][2] = 'bb';
-    position[7][3] = 'bq';
-    position[7][4] = 'bk';
-    position[7][5] = 'bb';
-    position[7][6] = 'bn';
+   const onDrop = e => {
+        e.preventDefault()   
+        const newPosition = copyPosition(currentPosition)
+        const {x,y} = calculateCoords(e)
+        const [p,rank,file] = e.dataTransfer.getData("text").split(',')    
+        newPosition[Number(rank)][Number(file)] = ""
+        newPosition[x][y] = p
+        dispatch(makeNewMove({newPosition}))
+        move (e)
+    }
+    
+    const onDragOver = e => {e.preventDefault()}
 
-    console.log(position);
-
-    return <div className="pieces">
-        {position.map((r, rank) =>
-            rank.map((f, file) =>
-                position[rank][file] 
-                 ? <Piece 
-                    key={rank + '-' +file}
-                    rank={rank}
-                    file={file} 
-                    piece={position[rank][file]}
-                    /> : null
-            )
+    return <div 
+        className='pieces' 
+        ref={ref} 
+        onDrop={onDrop} 
+        onDragOver={onDragOver} > 
+        {currentPosition.map((r,rank) => 
+            r.map((f,file) => 
+                currentPosition[rank][file]
+                ?   <Piece 
+                        key={rank+'-'+file} 
+                        rank = {rank}
+                        file = {file}
+                        piece = {currentPosition[rank][file]}
+                    />
+                :   null
+            )   
         )}
-    </div>;
+    </div>
     
 }
 export default Pieces;
